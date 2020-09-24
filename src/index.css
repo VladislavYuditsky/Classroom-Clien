@@ -1,0 +1,19 @@
+html, body, #root {
+    height: 100%;
+}
+
+.login {
+    width: 33.3%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.members{
+    width: 33.3%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
