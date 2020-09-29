@@ -86,7 +86,7 @@ class Members extends React.Component {
                         <Table>
                             <tbody>
                             {users.map(user =>
-                                <tr>
+                                <tr key={user.id}>
                                     <td>{user.username}</td>
                                     <td>{user.handUp && <img src={hand}/>}</td>
                                 </tr>
