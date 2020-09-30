@@ -19,7 +19,7 @@ class Members extends React.Component {
     }
 
     componentWillMount() {
-        if (!this.state.user || !this.state.user.authorized) {
+        if (!this.state.user) {
             history.replace('/login');
         }
 
