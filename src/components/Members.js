@@ -9,7 +9,7 @@ class Members extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null;
+        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
         this.state = {
             username: userData ? userData.username : '',
             user: userData,
@@ -50,7 +50,7 @@ class Members extends React.Component {
         })
             .then(() => {
                 this.sendMessage();
-                sessionStorage.removeItem('user');
+                localStorage.removeItem('user');
                 history.replace('/login');
             });
     }
@@ -108,7 +108,7 @@ class Members extends React.Component {
                                   let updatedUser = user ? msg.find(item => item.id === user.id) : null;
 
                                   if (updatedUser) {
-                                      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+                                      localStorage.setItem('user', JSON.stringify(updatedUser));
                                       this.setState({
                                           isHandUp: updatedUser.handUp
                                       })

@@ -8,7 +8,7 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null;
+        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
         this.state = {
             username: '',
             error: '',
@@ -34,7 +34,7 @@ class Login extends React.Component {
             username: this.state.username
         })
             .then((response) => {
-                sessionStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem('user', JSON.stringify(response.data));
 
                 this.sendMessage();
 
