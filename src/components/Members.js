@@ -40,6 +40,11 @@ class Members extends React.Component {
             username: this.state.username
         })
             .then(() => {
+                this.setState({
+                    user: {...this.state.user, handUp : !this.state.user.handUp},
+                    isHandUp: !this.state.isHandUp
+                })
+                localStorage.setItem('user', JSON.stringify({...this.state.user, handUp : !this.state.user.handUp}))
                 this.sendMessage();
             });
     }
@@ -105,17 +110,8 @@ class Members extends React.Component {
                               onDisconnect={() => {
                               }}
                               onMessage={(msg) => {
-                                  let updatedUser = user ? msg.find(item => item.id === user.id) : null;
-
-                                  if (updatedUser) {
-                                      localStorage.setItem('user', JSON.stringify(updatedUser));
-                                  } else {
-                                      history.replace('/login')
-                                  }
-
                                   this.setState({
                                       users: msg,
-                                      isHandUp: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).handUp : false
                                   })
                               }}
                               ref={(client) => {
