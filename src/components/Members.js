@@ -115,7 +115,7 @@ class Members extends React.Component {
 
                                   this.setState({
                                       users: msg,
-                                      isHandUp: JSON.parse(localStorage.getItem('user')).handUp
+                                      isHandUp: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).handUp : false
                                   })
                               }}
                               ref={(client) => {
