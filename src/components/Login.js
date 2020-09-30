@@ -12,12 +12,12 @@ class Login extends React.Component {
         this.state = {
             username: '',
             error: '',
-            user : userData
+            user: userData
         }
     }
 
     componentWillMount() {
-        if(this.state.user)
+        if (this.state.user)
             history.replace('/members');
     }
 
@@ -42,9 +42,9 @@ class Login extends React.Component {
                     history.replace('/members')
             })
             .catch((err) => {
-                    this.setState({
-                        error: err.response.data.message
-                    })
+                this.setState({
+                    error: err.response.data.message
+                })
             });
 
         this.sendMessage();
@@ -81,6 +81,9 @@ class Login extends React.Component {
                               onDisconnect={() => {
                               }}
                               onMessage={() => {
+                                  if (localStorage.getItem('user')) {
+                                      history.replace('/members')
+                                  }
                               }}
                               ref={(client) => {
                                   this.clientRef = client
