@@ -38,8 +38,7 @@ class Login extends React.Component {
 
                 this.sendMessage();
 
-                if (!this.state.error)
-                    history.replace('/members')
+                history.replace('/members')
             })
             .catch((err) => {
                 this.setState({
