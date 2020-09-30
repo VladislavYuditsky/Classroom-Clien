@@ -46,8 +46,6 @@ class Login extends React.Component {
                     error: err.response.data.message
                 })
             });
-
-        this.sendMessage();
     }
 
     sendMessage = () => {
