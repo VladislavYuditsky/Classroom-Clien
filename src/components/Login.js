@@ -78,9 +78,6 @@ class Login extends React.Component {
                               onDisconnect={() => {
                               }}
                               onMessage={() => {
-                                  if (localStorage.getItem('user')) {
-                                      history.replace('/members')
-                                  }
                               }}
                               ref={(client) => {
                                   this.clientRef = client
