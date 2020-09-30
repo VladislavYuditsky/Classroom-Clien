@@ -109,15 +109,13 @@ class Members extends React.Component {
 
                                   if (updatedUser) {
                                       localStorage.setItem('user', JSON.stringify(updatedUser));
-                                      this.setState({
-                                          isHandUp: updatedUser.handUp
-                                      })
                                   } else {
                                       history.replace('/login')
                                   }
 
                                   this.setState({
-                                      users: msg
+                                      users: msg,
+                                      isHandUp: JSON.parse(localStorage.getItem('user')).handUp
                                   })
                               }}
                               ref={(client) => {
