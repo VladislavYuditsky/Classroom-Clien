@@ -112,6 +112,8 @@ class Members extends React.Component {
                                       this.setState({
                                           isHandUp: updatedUser.handUp
                                       })
+                                  } else {
+                                      history.replace('/login')
                                   }
 
                                   this.setState({
