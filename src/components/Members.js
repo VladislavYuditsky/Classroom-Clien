@@ -9,8 +9,6 @@ class Members extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleTabClose = this.handleTabClose.bind(this);
-
         let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null;
         this.state = {
             username: userData ? userData.username : '',
@@ -18,10 +16,6 @@ class Members extends React.Component {
             isHandUp: userData ? userData.handUp : false,
             users: null
         }
-    }
-
-    componentDidMount() {
-        window.addEventListener('beforeunload', this.handleTabClose);
     }
 
     componentWillMount() {
@@ -35,10 +29,6 @@ class Members extends React.Component {
                     users: response.data
                 })
             });
-    }
-
-    handleTabClose() {
-        this.signOut()
     }
 
     sendMessage = () => {
