@@ -98,11 +98,13 @@ class Members extends React.Component {
                         <h5>Class members</h5>
                         <Table>
                             <tbody>
-                            {users.map(user =>
-                                <tr key={user.id}>
-                                    <td>{user.username}</td>
-                                    <td>{user.handUp && <img src={hand} alt='hand'/>}</td>
-                                </tr>
+                            {users.map(user => {
+                                    if (user.roles.indexOf('STUDENT') !== -1)
+                                        return <tr key={user.id}>
+                                            <td>{user.username}</td>
+                                            <td>{user.handUp && <img src={hand} alt='hand'/>}</td>
+                                        </tr>
+                                }
                             )}
                             </tbody>
                         </Table>
