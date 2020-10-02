@@ -15,7 +15,7 @@ class Members extends React.Component {
             user: userData,
             isHandUp: userData ? userData.handUp : false,
             users: null,
-            role: userData ? userData.role : 'STUDENT'
+            roles: userData ? userData.roles : ['STUDENT']
         }
     }
 
@@ -62,7 +62,7 @@ class Members extends React.Component {
     }
 
     render() {
-        const {username, users, isHandUp, user, role} = this.state;
+        const {username, users, isHandUp, user, roles} = this.state;
         return (
             <div>
                 <Navbar bg="primary">
@@ -70,13 +70,13 @@ class Members extends React.Component {
                     <Navbar.Collapse>
                         <Nav className="mr-auto">
                             <NavDropdown title='Actions'>
-                                {role === 'STUDENT' &&
+                                {roles.indexOf('STUDENT') !== -1 &&
                                 <NavDropdown.Item onClick={this.handAction}>
                                     Raise hand
                                     {isHandUp ? ' down' : ' up'}
                                 </NavDropdown.Item>
                                 }
-                                {role === 'TEACHER' &&
+                                {roles.indexOf('TEACHER') !== -1 &&
                                 <NavDropdown.Item href={'/students'}>
                                     Students list
                                 </NavDropdown.Item>

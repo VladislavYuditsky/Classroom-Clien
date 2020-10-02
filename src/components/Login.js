@@ -13,7 +13,7 @@ class Login extends React.Component {
             username: '',
             error: '',
             user: userData,
-            role: 'STUDENT',
+            roles: ['STUDENT'],
             email: ''
         }
     }
@@ -33,7 +33,8 @@ class Login extends React.Component {
         e.preventDefault();
 
         axios.post('http://localhost:8080/signIn', {
-            username: this.state.username
+            username: this.state.username,
+            roles: this.state.roles
         })
             .then((response) => {
                 localStorage.setItem('user', JSON.stringify(response.data));
@@ -54,18 +55,18 @@ class Login extends React.Component {
     };
 
     render() {
-        const {username, error, email, role} = this.state;
+        const {username, error, email, roles} = this.state;
         return (
             <div className="login">
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Nav fill variant="pills" defaultActiveKey="STUDENT"
-                             onSelect={eventKey => this.setState({role: eventKey})}>
+                             onSelect={eventKey => this.setState({roles: [eventKey]})}>
                             <Nav.Item>
-                                <Nav.Link eventKey="STUDENT">Student</Nav.Link>
+                                <Nav.Link eventKey='STUDENT'>Student</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link eventKey="TEACHER">Teacher</Nav.Link>
+                                <Nav.Link eventKey='TEACHER'>Teacher</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Form.Group>
@@ -77,14 +78,16 @@ class Login extends React.Component {
                             onChange={this.handleChange('username')}
                         />
                     </Form.Group>
-                    {role === 'TEACHER' && <Form.Group>
+                    {roles.indexOf('TEACHER') !== -1 &&
+                    <Form.Group>
                         <Form.Control
                             type="text"
                             placeholder="Email"
                             value={email}
                             onChange={this.handleChange('email')}
                         />
-                    </Form.Group>}
+                    </Form.Group>
+                    }
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Button variant="primary" type="submit" block className="form-btn">
                         Login
