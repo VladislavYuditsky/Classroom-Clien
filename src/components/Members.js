@@ -14,7 +14,8 @@ class Members extends React.Component {
             username: userData ? userData.username : '',
             user: userData,
             isHandUp: userData ? userData.handUp : false,
-            users: null
+            users: null,
+            role: userData ? userData.role : 'STUDENT'
         }
     }
 
@@ -41,10 +42,10 @@ class Members extends React.Component {
         })
             .then(() => {
                 this.setState({
-                    user: {...this.state.user, handUp : !this.state.user.handUp},
+                    user: {...this.state.user, handUp: !this.state.user.handUp},
                     isHandUp: !this.state.isHandUp
                 })
-                localStorage.setItem('user', JSON.stringify({...this.state.user, handUp : !this.state.user.handUp}))
+                localStorage.setItem('user', JSON.stringify({...this.state.user, handUp: !this.state.user.handUp}))
                 this.sendMessage();
             });
     }
@@ -61,7 +62,7 @@ class Members extends React.Component {
     }
 
     render() {
-        const {username, users, isHandUp, user} = this.state;
+        const {username, users, isHandUp, user, role} = this.state;
         return (
             <div>
                 <Navbar bg="primary">
@@ -69,10 +70,17 @@ class Members extends React.Component {
                     <Navbar.Collapse>
                         <Nav className="mr-auto">
                             <NavDropdown title='Actions'>
+                                {role === 'STUDENT' &&
                                 <NavDropdown.Item onClick={this.handAction}>
                                     Raise hand
                                     {isHandUp ? ' down' : ' up'}
                                 </NavDropdown.Item>
+                                }
+                                {role === 'TEACHER' &&
+                                <NavDropdown.Item href={'/students'}>
+                                    Students list
+                                </NavDropdown.Item>
+                                }
                             </NavDropdown>
                         </Nav>
                         <Nav>
