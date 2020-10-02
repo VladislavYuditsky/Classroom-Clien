@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Button, Alert, Nav} from "react-bootstrap";
+import {Alert, Button, Form, Nav} from "react-bootstrap";
 import SockJsClient from 'react-stomp';
 import {history} from "../utils";
 import * as axios from "axios";
@@ -34,7 +34,8 @@ class Login extends React.Component {
 
         axios.post('http://localhost:8080/signIn', {
             username: this.state.username,
-            roles: this.state.roles
+            roles: this.state.roles,
+            email: this.state.email
         })
             .then((response) => {
                 localStorage.setItem('user', JSON.stringify(response.data));
