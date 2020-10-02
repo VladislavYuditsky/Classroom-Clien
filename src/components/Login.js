@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Button, Alert} from "react-bootstrap";
+import {Form, Button, Alert, Nav} from "react-bootstrap";
 import SockJsClient from 'react-stomp';
 import {history} from "../utils";
 import * as axios from "axios";
@@ -12,7 +12,9 @@ class Login extends React.Component {
         this.state = {
             username: '',
             error: '',
-            user: userData
+            user: userData,
+            role: 'STUDENT',
+            email: ''
         }
     }
 
@@ -52,11 +54,21 @@ class Login extends React.Component {
     };
 
     render() {
-        const {username, error} = this.state;
+        const {username, error, email, role} = this.state;
         return (
             <div className="login">
-                Your name:
                 <Form onSubmit={this.handleSubmit}>
+                    <Form.Group>
+                        <Nav fill variant="pills" defaultActiveKey="STUDENT"
+                             onSelect={eventKey => this.setState({role: eventKey})}>
+                            <Nav.Item>
+                                <Nav.Link eventKey="STUDENT">Student</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="TEACHER">Teacher</Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                    </Form.Group>
                     <Form.Group>
                         <Form.Control
                             type="text"
@@ -65,6 +77,14 @@ class Login extends React.Component {
                             onChange={this.handleChange('username')}
                         />
                     </Form.Group>
+                    {role === 'TEACHER' && <Form.Group>
+                        <Form.Control
+                            type="text"
+                            placeholder="Email"
+                            value={email}
+                            onChange={this.handleChange('email')}
+                        />
+                    </Form.Group>}
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Button variant="primary" type="submit" block className="form-btn">
                         Login
