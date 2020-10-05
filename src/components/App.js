@@ -5,6 +5,7 @@ import {history} from "../utils";
 import {Login} from "./Login";
 import {Members} from "./Members";
 import {Students} from "./Students"
+import {Student} from "./Student";
 
 export default () => (
     <Router history={history}>
@@ -20,5 +21,6 @@ export default () => (
         <Route exact path='/students'>
             <Students/>
         </Route>
+        <Route path={'/student/:username'} component={Student}/>
     </Router>
 );

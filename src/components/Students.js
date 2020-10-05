@@ -2,6 +2,7 @@ import React from 'react';
 import {history} from "../utils";
 import * as axios from "axios";
 import {Table} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 class Students extends React.Component {
     constructor(props) {
@@ -42,7 +43,11 @@ class Students extends React.Component {
                             {students.map(student => {
                                     if (student.roles.indexOf('STUDENT') !== -1)
                                         return <tr key={student.id}>
-                                            <td>{student.username}</td>
+                                            <td>
+                                                <Link to={'/student/' + student.username}>
+                                                    {student.username}
+                                                </Link>
+                                            </td>
                                         </tr>
                                 }
                             )}
