@@ -2,6 +2,8 @@ import React from 'react';
 import {history} from "../utils";
 import * as axios from "axios";
 import {Button, ButtonGroup, Form, Table, ToggleButton} from "react-bootstrap";
+import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
+import formatDate from "dateformat"
 
 class Student extends React.Component {
     constructor(props) {
@@ -14,8 +16,8 @@ class Student extends React.Component {
             studentActions: null,
             actionType: '',
             searchParam: '',
-            dateFrom: '',
-            dateTo: '',
+            dateFrom: new Date(),
+            dateTo: new Date(),
         }
     }
 
@@ -54,13 +56,9 @@ class Student extends React.Component {
             console.log('action')
             searchParam = searchParam + 'action:' + this.state.actionType + ','
         }
-        if (this.state.dateFrom) {
-            console.log('>')
-            searchParam = searchParam + 'dateTime>' + this.state.dateFrom + ','
-        }
-        if (this.state.dateTo) {
-            console.log('<')
-            searchParam = searchParam + 'dateTime<' + this.state.dateTo + ','
+        if (this.state.dateFrom !== this.state.dateTo) {
+            searchParam = searchParam + 'dateTime>' + formatDate(this.state.dateFrom, "yyyy-MM-dd HH:mm:ss") + ','
+            searchParam = searchParam + 'dateTime<' + formatDate(this.state.dateTo, "yyyy-MM-dd HH:mm:ss") + ','
         }
 
         this.setState({
@@ -86,6 +84,21 @@ class Student extends React.Component {
         this.parseSearchParam()
     };
 
+    handleDateChange = dates => {
+        if (dates) {
+            this.setState({
+                dateFrom: dates[0],
+                dateTo: dates[1]
+            }, () => this.parseSearchParam())
+        } else {
+            const date = new Date();
+            this.setState({
+                dateFrom: date,
+                dateTo: date
+            }, () => this.parseSearchParam())
+        }
+    }
+
     render() {
         const {studentActions, dateFrom, dateTo} = this.state;
         const radios = [
@@ -100,6 +113,7 @@ class Student extends React.Component {
                 <div className="members">
                     {studentActions &&
                     <div>
+                        <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>
                         <Form.Group>
                             <Form.Control
                                 type="text"
