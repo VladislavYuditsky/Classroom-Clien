@@ -85,6 +85,9 @@ class Members extends React.Component {
                         </Nav>
                         <Nav>
                             <NavDropdown title={username}>
+                                {roles.indexOf('TEACHER') !== -1 &&
+                                <NavDropdown.Item href={'/settings'}>Settings</NavDropdown.Item>
+                                }
                                 <NavDropdown.Item onClick={this.signOut}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
