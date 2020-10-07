@@ -10,14 +10,15 @@ class Student extends React.Component {
         super(props);
 
         let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        const date = new Date();
         this.state = {
             user: userData,
             username: '',
             studentActions: null,
             actionType: '',
             searchParam: '',
-            dateFrom: new Date(),
-            dateTo: new Date(),
+            dateFrom: date,
+            dateTo: date,
         }
     }
 
@@ -57,8 +58,8 @@ class Student extends React.Component {
             searchParam = searchParam + 'action:' + this.state.actionType + ','
         }
         if (this.state.dateFrom !== this.state.dateTo) {
-            searchParam = searchParam + 'dateTime>' + formatDate(this.state.dateFrom, "yyyy-MM-dd HH:mm:ss") + ','
-            searchParam = searchParam + 'dateTime<' + formatDate(this.state.dateTo, "yyyy-MM-dd HH:mm:ss") + ','
+            searchParam = searchParam + 'dateTime>' + formatDate(this.state.dateFrom, "yyyy-mm-dd HH:MM:ss") + ','
+            searchParam = searchParam + 'dateTime<' + formatDate(this.state.dateTo, "yyyy-mm-dd HH:MM:ss") + ','
         }
 
         this.setState({
