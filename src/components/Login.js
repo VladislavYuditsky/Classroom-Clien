@@ -14,7 +14,6 @@ class Login extends React.Component {
             error: '',
             user: userData,
             roles: ['STUDENT'],
-            email: ''
         }
     }
 
@@ -56,7 +55,7 @@ class Login extends React.Component {
     };
 
     render() {
-        const {username, error, email, roles} = this.state;
+        const {username, error} = this.state;
         return (
             <div className="login">
                 <Form onSubmit={this.handleSubmit}>
@@ -79,16 +78,6 @@ class Login extends React.Component {
                             onChange={this.handleChange('username')}
                         />
                     </Form.Group>
-                    {roles.indexOf('TEACHER') !== -1 &&
-                    <Form.Group>
-                        <Form.Control
-                            type="text"
-                            placeholder="Email"
-                            value={email}
-                            onChange={this.handleChange('email')}
-                        />
-                    </Form.Group>
-                    }
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Button variant="primary" type="submit" block className="form-btn">
                         Login
