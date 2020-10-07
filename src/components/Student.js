@@ -4,6 +4,7 @@ import * as axios from "axios";
 import {Button, ButtonGroup, Form, Table, ToggleButton} from "react-bootstrap";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import formatDate from "dateformat"
+import {NavigationBar} from "./Navbar";
 
 class Student extends React.Component {
     constructor(props) {
@@ -111,6 +112,7 @@ class Student extends React.Component {
         ];
         return (
             <div>
+                <NavigationBar/>
                 <div className="members">
                     {studentActions &&
                     <div>

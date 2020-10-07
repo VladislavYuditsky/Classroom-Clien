@@ -3,6 +3,7 @@ import {history} from "../utils";
 import * as axios from "axios";
 import {Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import {NavigationBar} from "./Navbar";
 
 class Students extends React.Component {
     constructor(props) {
@@ -34,6 +35,7 @@ class Students extends React.Component {
         const {students} = this.state;
         return (
             <div>
+                <NavigationBar/>
                 <div className="members">
                     {students &&
                     <div>

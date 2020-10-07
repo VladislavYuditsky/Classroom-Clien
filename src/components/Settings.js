@@ -2,6 +2,7 @@ import React from 'react';
 import {history} from "../utils";
 import * as axios from "axios";
 import {Button, ButtonGroup, Form, ToggleButton} from "react-bootstrap";
+import {NavigationBar} from "./Navbar";
 
 class Settings extends React.Component {
     constructor(props) {
@@ -99,6 +100,7 @@ class Settings extends React.Component {
 
         return (
             <div>
+                <NavigationBar/>
                 <div className="members">
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Group>
