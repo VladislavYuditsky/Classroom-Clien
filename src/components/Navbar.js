@@ -3,6 +3,7 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
 import SockJsClient from "react-stomp";
+import classroom from '../classroom.svg';
 
 class NavigationBar extends React.Component {
     constructor(props) {
@@ -49,6 +50,15 @@ class NavigationBar extends React.Component {
         return (
             <div>
                 <Navbar bg="primary">
+                    <Navbar.Brand href="/members">
+                        <img
+                            src={classroom}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top"
+                            alt="classroom"
+                        />
+                    </Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <Nav className="mr-auto">
