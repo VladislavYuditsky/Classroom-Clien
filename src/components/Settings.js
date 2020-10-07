@@ -1,7 +1,7 @@
 import React from 'react';
 import {history} from "../utils";
 import * as axios from "axios";
-import {Button, ButtonGroup, Form, ToggleButton} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Form, ToggleButton} from "react-bootstrap";
 import {NavigationBar} from "./Navbar";
 
 class Settings extends React.Component {
@@ -15,7 +15,8 @@ class Settings extends React.Component {
             email: userData ? userData.email : '',
             newEmail: userData ? userData.email : '',
             generationFrequency: 1,
-            reportId: null
+            reportId: null,
+            error: ''
         }
     }
 
@@ -34,7 +35,10 @@ class Settings extends React.Component {
     }
 
     handleChange = field => e => {
-        this.setState({[field]: e.target.value});
+        this.setState({
+            [field]: e.target.value,
+            error: ''
+        });
     };
 
     handleSubmit = e => {
@@ -77,21 +81,29 @@ class Settings extends React.Component {
                         reportId: null
                     })
                 })
-        } else {
-            axios.post('http://localhost:8080/report', {
-                generationFrequency: this.state.generationFrequency,
-                recipientUsername: this.state.username
-            })
-                .then((response) => {
-                    this.setState({
-                        reportId: response.data.id
-                    })
+        }
+
+        if (!this.state.reportId) {
+            if (!this.state.email) {
+                this.setState({
+                    error: 'You must specify the mail to receive the report'
                 })
+            } else {
+                axios.post('http://localhost:8080/report', {
+                    generationFrequency: this.state.generationFrequency,
+                    recipientUsername: this.state.username
+                })
+                    .then((response) => {
+                        this.setState({
+                            reportId: response.data.id
+                        })
+                    })
+            }
         }
     }
 
     render() {
-        const {newEmail, generationFrequency, reportId} = this.state;
+        const {newEmail, generationFrequency, reportId, error} = this.state;
 
         const radios = [
             {name: 'Day', value: '1'},
@@ -141,6 +153,7 @@ class Settings extends React.Component {
                             </ButtonGroup>
                         </div>
                         }
+                        {error && <Alert variant="danger">{error}</Alert>}
                     </div>
                 </div>
             </div>
