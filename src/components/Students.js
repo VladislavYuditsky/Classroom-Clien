@@ -1,5 +1,5 @@
 import React from 'react';
-import {history} from "../utils";
+import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
 import {Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
@@ -37,7 +37,7 @@ class Students extends React.Component {
             <div>
                 <NavigationBar/>
                 <div className="members">
-                    {students &&
+                    {students && isTeacher() &&
                     <div>
                         <h5>Students</h5>
                         <Table>
@@ -56,6 +56,9 @@ class Students extends React.Component {
                             </tbody>
                         </Table>
                     </div>
+                    }
+                    {isStudent() &&
+                        <h2>Access denied</h2>
                     }
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {history} from "../utils";
+import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
 import {Alert, Button, ButtonGroup, Form, ToggleButton} from "react-bootstrap";
 import {NavigationBar} from "./Navbar";
@@ -114,47 +114,54 @@ class Settings extends React.Component {
             <div>
                 <NavigationBar/>
                 <div className="members">
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Group>
-                            Email
-                            <Form.Control
-                                type="email"
-                                placeholder="email"
-                                value={newEmail}
-                                onChange={this.handleChange('newEmail')}
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" block className="form-btn">
-                            Change
-                        </Button>
-                    </Form>
+                    {isTeacher() &&
                     <div>
-                        Report
-                        <Button variant="primary" onClick={this.changeReportState}>
-                            {reportId ? 'Disable' : 'Enable'}
-                        </Button>
-                        {reportId &&
+                        <Form onSubmit={this.handleSubmit}>
+                            <Form.Group>
+                                Email
+                                <Form.Control
+                                    type="email"
+                                    placeholder="email"
+                                    value={newEmail}
+                                    onChange={this.handleChange('newEmail')}
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit" block className="form-btn">
+                                Change
+                            </Button>
+                        </Form>
                         <div>
-                            Generation frequency
-                            <ButtonGroup toggle>
-                                {radios.map((radio, idx) => (
-                                    <ToggleButton
-                                        key={idx}
-                                        type="radio"
-                                        variant="secondary"
-                                        name="radio"
-                                        value={radio.value}
-                                        checked={generationFrequency === radio.value}
-                                        onChange={(e) => this.setGenerationFrequency(e.currentTarget.value)}
-                                    >
-                                        {radio.name}
-                                    </ToggleButton>
-                                ))}
-                            </ButtonGroup>
+                            Report
+                            <Button variant="primary" onClick={this.changeReportState}>
+                                {reportId ? 'Disable' : 'Enable'}
+                            </Button>
+                            {reportId &&
+                            <div>
+                                Generation frequency
+                                <ButtonGroup toggle>
+                                    {radios.map((radio, idx) => (
+                                        <ToggleButton
+                                            key={idx}
+                                            type="radio"
+                                            variant="secondary"
+                                            name="radio"
+                                            value={radio.value}
+                                            checked={generationFrequency === radio.value}
+                                            onChange={(e) => this.setGenerationFrequency(e.currentTarget.value)}
+                                        >
+                                            {radio.name}
+                                        </ToggleButton>
+                                    ))}
+                                </ButtonGroup>
+                            </div>
+                            }
+                            {error && <Alert variant="danger">{error}</Alert>}
                         </div>
-                        }
-                        {error && <Alert variant="danger">{error}</Alert>}
                     </div>
+                    }
+                    {isStudent() &&
+                    <h2>Access denied</h2>
+                    }
                 </div>
             </div>
         )

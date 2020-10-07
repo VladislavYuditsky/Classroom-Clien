@@ -1,5 +1,5 @@
 import React from 'react';
-import {history} from "../utils";
+import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
 import {Button, ButtonGroup, Form, Table, ToggleButton} from "react-bootstrap";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
@@ -114,7 +114,7 @@ class Student extends React.Component {
             <div>
                 <NavigationBar/>
                 <div className="members">
-                    {studentActions &&
+                    {studentActions && isTeacher() &&
                     <div>
                         <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>
                         <Form.Group>
@@ -161,6 +161,9 @@ class Student extends React.Component {
                             </tbody>
                         </Table>
                     </div>
+                    }
+                    {isStudent() &&
+                    <h2>Access denied</h2>
                     }
                 </div>
             </div>
