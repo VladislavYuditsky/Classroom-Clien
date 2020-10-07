@@ -16,7 +16,8 @@ class Settings extends React.Component {
             newEmail: userData ? userData.email : '',
             generationFrequency: 1,
             reportId: null,
-            error: ''
+            reportError: '',
+            emailError: ''
         }
     }
 
@@ -37,7 +38,8 @@ class Settings extends React.Component {
     handleChange = field => e => {
         this.setState({
             [field]: e.target.value,
-            error: ''
+            emailError: '',
+            reportError: ''
         });
     };
 
@@ -54,6 +56,11 @@ class Settings extends React.Component {
                     email: this.state.newEmail
                 })
             })
+            .catch((err) => {
+                this.setState({
+                    emailError: err.response.data.message
+                })
+            });
     }
 
     setGenerationFrequency(value) {
@@ -86,7 +93,7 @@ class Settings extends React.Component {
         if (!this.state.reportId) {
             if (!this.state.email) {
                 this.setState({
-                    error: 'You must specify the mail to receive the report'
+                    reportError: 'You must specify the mail to receive the report'
                 })
             } else {
                 axios.post('http://localhost:8080/report', {
@@ -103,7 +110,7 @@ class Settings extends React.Component {
     }
 
     render() {
-        const {newEmail, generationFrequency, reportId, error} = this.state;
+        const {newEmail, generationFrequency, reportId, reportError, emailError} = this.state;
 
         const radios = [
             {name: 'Day', value: '1'},
@@ -135,6 +142,7 @@ class Settings extends React.Component {
                             <Button variant="primary" onClick={this.changeReportState}>
                                 {reportId ? 'Disable' : 'Enable'}
                             </Button>
+                            {emailError && <Alert variant="danger">{emailError}</Alert>}
                             {reportId &&
                             <div>
                                 Generation frequency
@@ -155,7 +163,7 @@ class Settings extends React.Component {
                                 </ButtonGroup>
                             </div>
                             }
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {reportError && <Alert variant="danger">{reportError}</Alert>}
                         </div>
                     </div>
                     }
