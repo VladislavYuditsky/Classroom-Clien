@@ -1,7 +1,7 @@
 import React from 'react';
 import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
-import {Button, ButtonGroup, Form, Table, ToggleButton} from "react-bootstrap";
+import {Button, ButtonGroup, Table, ToggleButton} from "react-bootstrap";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import formatDate from "dateformat"
 import {NavigationBar} from "./Navbar";
@@ -117,22 +117,6 @@ class Student extends React.Component {
                     {studentActions && isTeacher() &&
                     <div>
                         <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>
-                        <Form.Group>
-                            <Form.Control
-                                type="text"
-                                placeholder="From"
-                                value={dateFrom}
-                                onChange={this.handleChange('dateFrom')}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Control
-                                type="text"
-                                placeholder="To"
-                                value={dateTo}
-                                onChange={this.handleChange('dateTo')}
-                            />
-                        </Form.Group>
                         <ButtonGroup toggle>
                             {radios.map((radio, idx) => (
                                 <ToggleButton
