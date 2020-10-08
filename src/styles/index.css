@@ -9,3 +9,11 @@ html, body, #root {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.studentLogs {
+    width: 33.3%;
+    position: absolute;
+    left: 33.3%;
+    top: 15%;
+    transform: translate(-10%);
+}

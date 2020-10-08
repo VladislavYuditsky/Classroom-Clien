@@ -113,24 +113,28 @@ class Student extends React.Component {
         return (
             <div>
                 <NavigationBar/>
-                <div className="screen-center">
+                <div className="studentLogs row">
                     {studentActions && isTeacher() &&
                     <div>
-                        <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>
-                        <ButtonGroup toggle>
-                            {radios.map((radio, idx) => (
-                                <ToggleButton
-                                    key={idx}
-                                    type="radio"
-                                    variant="primary"
-                                    name={radio.name}
-                                    onClick={() => this.setActionType(radio.value)}
-                                >
-                                    {radio.name}
-                                </ToggleButton>
-                            ))}
-                        </ButtonGroup>
-                        <Button variant="primary" type="submit" block className="form-btn" onClick={this.handleSubmit}>
+                        <div className="ml-5">
+                            <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>
+                        </div>
+                        <div className="mt-2">
+                            <ButtonGroup toggle>
+                                {radios.map((radio, idx) => (
+                                    <ToggleButton
+                                        key={idx}
+                                        type="radio"
+                                        variant="primary"
+                                        name={radio.name}
+                                        onClick={() => this.setActionType(radio.value)}
+                                    >
+                                        {radio.name}
+                                    </ToggleButton>
+                                ))}
+                            </ButtonGroup>
+                        </div>
+                        <Button variant="primary" type="submit" block className="form-btn mt-2" onClick={this.handleSubmit}>
                             Search
                         </Button>
                         <Table>
@@ -140,6 +144,8 @@ class Student extends React.Component {
                                     <td>{action.username}</td>
                                     <td>{action.action}</td>
                                     <td>{action.dateTime}</td>
+                                    {/*<td>{new Date(action.dateTime)}</td>*/}
+                                    {/*<td>{new Date('2007-06-09T17:46:21').toString()}</td>*/}
                                 </tr>
                             })}
                             </tbody>
