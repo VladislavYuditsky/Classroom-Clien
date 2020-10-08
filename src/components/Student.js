@@ -59,8 +59,8 @@ class Student extends React.Component {
             searchParam = searchParam + 'action:' + this.state.actionType + ','
         }
         if (this.state.dateFrom !== this.state.dateTo) {
-            searchParam = searchParam + 'dateTime>' + formatDate(this.state.dateFrom, "yyyy-mm-dd HH:MM:ss") + ','
-            searchParam = searchParam + 'dateTime<' + formatDate(this.state.dateTo, "yyyy-mm-dd HH:MM:ss") + ','
+            searchParam = searchParam + 'dateTime>' + this.timeFromCurrentUTC(this.state.dateFrom) + ','
+            searchParam = searchParam + 'dateTime<' + this.timeFromCurrentUTC(this.state.dateTo) + ','
         }
 
         this.setState({
@@ -101,6 +101,19 @@ class Student extends React.Component {
         }
     }
 
+    //Calculate the time relative to the server that contains the time in the UTC-0
+    timeToCurrentUTC(dateTime) {
+        const serverDate = new Date(dateTime);
+        const clientTimezoneOffset = new Date().getTimezoneOffset();
+        return formatDate(serverDate.setMinutes(serverDate.getMinutes() - clientTimezoneOffset), "yyyy-mm-dd HH:MM:ss")
+    }
+
+    timeFromCurrentUTC(dateTime){
+        const clientDate = new Date(dateTime);
+        const clientTimezoneOffset = new Date().getTimezoneOffset();
+        return formatDate(clientDate.setMinutes(clientDate.getMinutes() + clientTimezoneOffset), "yyyy-mm-dd HH:MM:ss")
+    }
+
     render() {
         const {studentActions, dateFrom, dateTo} = this.state;
         const radios = [
@@ -134,7 +147,8 @@ class Student extends React.Component {
                                 ))}
                             </ButtonGroup>
                         </div>
-                        <Button variant="primary" type="submit" block className="form-btn mt-2" onClick={this.handleSubmit}>
+                        <Button variant="primary" type="submit" block className="form-btn mt-2"
+                                onClick={this.handleSubmit}>
                             Search
                         </Button>
                         <Table>
@@ -143,9 +157,7 @@ class Student extends React.Component {
                                 return <tr key={action.id}>
                                     <td>{action.username}</td>
                                     <td>{action.action}</td>
-                                    <td>{action.dateTime}</td>
-                                    {/*<td>{new Date(action.dateTime)}</td>*/}
-                                    {/*<td>{new Date('2007-06-09T17:46:21').toString()}</td>*/}
+                                    <td>{this.timeToCurrentUTC(action.dateTime)}</td>
                                 </tr>
                             })}
                             </tbody>
