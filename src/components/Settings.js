@@ -120,7 +120,7 @@ class Settings extends React.Component {
         return (
             <div>
                 <NavigationBar/>
-                <div className="members">
+                <div className="screen-center">
                     {isTeacher() &&
                     <div>
                         <Form onSubmit={this.handleSubmit}>

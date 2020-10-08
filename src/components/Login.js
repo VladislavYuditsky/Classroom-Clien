@@ -57,7 +57,7 @@ class Login extends React.Component {
     render() {
         const {username, error} = this.state;
         return (
-            <div className="login">
+            <div className="screen-center">
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Nav fill variant="pills" defaultActiveKey="STUDENT"

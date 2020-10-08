@@ -113,7 +113,7 @@ class Student extends React.Component {
         return (
             <div>
                 <NavigationBar/>
-                <div className="members">
+                <div className="screen-center">
                     {studentActions && isTeacher() &&
                     <div>
                         <DateTimeRangePicker value={[dateFrom, dateTo]} onChange={this.handleDateChange}/>

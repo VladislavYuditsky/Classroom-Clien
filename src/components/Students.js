@@ -36,7 +36,7 @@ class Students extends React.Component {
         return (
             <div>
                 <NavigationBar/>
-                <div className="members">
+                <div className="screen-center">
                     {students && isTeacher() &&
                     <div>
                         <h5>Students</h5>

@@ -34,7 +34,7 @@ class Members extends React.Component {
             <div>
                 <NavigationBar/>
 
-                <div className="members">
+                <div className="screen-center">
 
                     {users &&
                     <div>

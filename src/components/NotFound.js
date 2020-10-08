@@ -13,7 +13,7 @@ class NotFound extends React.Component {
                 {isAuthorized() &&
                 <NavigationBar/>
                 }
-                <div className="members">
+                <div className="screen-center">
                     <h2>Not found 404</h2>
                 </div>
             </div>
