@@ -15,5 +15,4 @@ html, body, #root {
     position: absolute;
     left: 33.3%;
     top: 15%;
-    transform: translate(-10%);
 }
