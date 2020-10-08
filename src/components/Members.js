@@ -3,7 +3,7 @@ import {Table} from "react-bootstrap";
 import SockJsClient from 'react-stomp';
 import {history} from "../utils";
 import * as axios from "axios";
-import hand from '../hand.svg';
+import hand from '../icons/hand.svg';
 import {NavigationBar} from "./Navbar";
 
 class Members extends React.Component {

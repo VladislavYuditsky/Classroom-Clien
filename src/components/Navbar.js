@@ -3,7 +3,7 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {history, isStudent, isTeacher} from "../utils";
 import * as axios from "axios";
 import SockJsClient from "react-stomp";
-import classroom from '../classroom.svg';
+import classroom from '../icons/classroom.svg';
 
 class NavigationBar extends React.Component {
     constructor(props) {
