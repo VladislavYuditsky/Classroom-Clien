@@ -2,9 +2,11 @@ import React from 'react';
 import {Table} from "react-bootstrap";
 import SockJsClient from 'react-stomp';
 import {history} from "../utils";
-import * as axios from "axios";
 import hand from '../icons/hand.svg';
 import {NavigationBar} from "./Navbar";
+import {API_URL, STOMP_ENDPOINT, USER, USERS_TOPIC} from "../constants";
+import {LOGIN} from "../routes";
+import {api} from "../api/app";
 
 class Members extends React.Component {
     constructor(props) {
@@ -16,11 +18,11 @@ class Members extends React.Component {
     }
 
     componentWillMount() {
-        if (!localStorage.getItem('user')) {
-            history.replace('/login');
+        if (!localStorage.getItem(USER)) {
+            history.replace(LOGIN);
         }
 
-        axios.get('http://localhost:8080/users')
+        api.getAuthorizedUsers()
             .then((response) => {
                 this.setState({
                     users: response.data
@@ -56,13 +58,17 @@ class Members extends React.Component {
 
                 </div>
 
-                <SockJsClient url='http://localhost:8080/classroom-ws/'
-                              topics={['/topic/users']}
+                <SockJsClient url={API_URL + STOMP_ENDPOINT}
+                              topics={[USERS_TOPIC]}
                               onConnect={() => {
                               }}
                               onDisconnect={() => {
                               }}
                               onMessage={(msg) => {
+                                  if (!localStorage.getItem(USER)) {
+                                      history.replace(LOGIN);
+                                  }
+
                                   this.setState({
                                       users: msg,
                                   })

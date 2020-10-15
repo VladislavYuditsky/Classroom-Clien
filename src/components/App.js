@@ -8,26 +8,27 @@ import {Students} from "./Students"
 import {Student} from "./Student";
 import {Settings} from "./Settings";
 import {NotFound} from "./NotFound";
+import {LOGIN, MEMBERS, SETTINGS, STUDENT, STUDENTS} from "../routes";
 
 export default () => (
     <Router history={history}>
         <Switch>
             <Route exact path='/'>
-                <Redirect to='/members'/>
+                <Redirect to={MEMBERS}/>
             </Route>
-            <Route exact path='/login'>
+            <Route exact path={LOGIN}>
                 <Login/>
             </Route>
-            <Route exact path='/members'>
+            <Route exact path={MEMBERS}>
                 <Members/>
             </Route>
-            <Route exact path='/students'>
+            <Route exact path={STUDENTS}>
                 <Students/>
             </Route>
-            <Route exact path='/settings'>
+            <Route exact path={SETTINGS}>
                 <Settings/>
             </Route>
-            <Route path={'/student/:username'} component={Student}/>
+            <Route path={`${STUDENT}/:username`} component={Student}/>
             <Route component={NotFound}/>
         </Switch>
     </Router>

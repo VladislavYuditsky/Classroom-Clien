@@ -1,15 +1,17 @@
 import React from 'react';
 import {history, isStudent, isTeacher} from "../utils";
-import * as axios from "axios";
 import {Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {NavigationBar} from "./Navbar";
+import {USER} from "../constants";
+import {LOGIN} from "../routes";
+import {api} from "../api/app";
 
 class Students extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let userData = localStorage.getItem(USER) ? JSON.parse(localStorage.getItem(USER)) : null;
         this.state = {
             user: userData,
             username: userData ? userData.username : '',
@@ -20,10 +22,10 @@ class Students extends React.Component {
 
     componentWillMount() {
         if (!this.state.user) {
-            history.replace('/login');
+            history.replace(LOGIN);
         }
 
-        axios.get('http://localhost:8080/students')
+        api.getStudents()
             .then((response) => {
                 this.setState({
                     students: response.data
@@ -58,7 +60,7 @@ class Students extends React.Component {
                     </div>
                     }
                     {isStudent() &&
-                        <h2>Access denied</h2>
+                    <h2>Access denied</h2>
                     }
                 </div>
             </div>

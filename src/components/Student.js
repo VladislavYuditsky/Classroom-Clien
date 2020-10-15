@@ -1,16 +1,18 @@
 import React from 'react';
 import {history, isStudent, isTeacher} from "../utils";
-import * as axios from "axios";
 import {Button, ButtonGroup, Table, ToggleButton} from "react-bootstrap";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import formatDate from "dateformat"
 import {NavigationBar} from "./Navbar";
+import {ACTION_EQUALS, DATE_FROM, DATE_PATTERN, DATE_TO, USER} from "../constants";
+import {LOGIN} from "../routes";
+import {api} from "../api/app";
 
 class Student extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let userData = localStorage.getItem(USER) ? JSON.parse(localStorage.getItem(USER)) : null;
         const date = new Date();
         this.state = {
             user: userData,
@@ -25,7 +27,7 @@ class Student extends React.Component {
 
     componentWillMount() {
         if (!this.state.user) {
-            history.replace('/login');
+            history.replace(LOGIN);
         }
 
         const username = this.props.match.params.username
@@ -34,7 +36,7 @@ class Student extends React.Component {
             username: username
         })
 
-        axios.get(`http://localhost:8080/student/${username}?search=`)
+        api.getStudentActions(username, '')
             .then((response) => {
                 this.setState({
                     studentActions: response.data
@@ -46,21 +48,17 @@ class Student extends React.Component {
         this.setState({
             actionType: name
         })
-
-        console.log('setActionType')
         this.parseSearchParam()
     }
 
     parseSearchParam() {
         let searchParam = ''
-        console.log('parse')
         if (this.state.actionType) {
-            console.log('action')
-            searchParam = searchParam + 'action:' + this.state.actionType + ','
+            searchParam = searchParam + ACTION_EQUALS + this.state.actionType + ','
         }
         if (this.state.dateFrom !== this.state.dateTo) {
-            searchParam = searchParam + 'dateTime>' + this.timeFromCurrentUTC(this.state.dateFrom) + ','
-            searchParam = searchParam + 'dateTime<' + this.timeFromCurrentUTC(this.state.dateTo) + ','
+            searchParam = searchParam + DATE_FROM + this.timeFromCurrentUTC(this.state.dateFrom) + ','
+            searchParam = searchParam + DATE_TO + this.timeFromCurrentUTC(this.state.dateTo) + ','
         }
 
         this.setState({
@@ -71,20 +69,13 @@ class Student extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        axios.get(`http://localhost:8080/student/${this.state.username}?search=${this.state.searchParam}`)
+        api.getStudentActions(this.state.username, this.state.searchParam)
             .then((response) => {
                 this.setState({
                     studentActions: response.data
                 })
             });
     }
-
-    handleChange = field => e => {
-        this.setState({[field]: e.target.value});
-
-        console.log('handleChange')
-        this.parseSearchParam()
-    };
 
     handleDateChange = dates => {
         if (dates) {
@@ -105,13 +96,13 @@ class Student extends React.Component {
     timeToCurrentUTC(dateTime) {
         const serverDate = new Date(dateTime);
         const clientTimezoneOffset = new Date().getTimezoneOffset();
-        return formatDate(serverDate.setMinutes(serverDate.getMinutes() - clientTimezoneOffset), "yyyy-mm-dd HH:MM:ss")
+        return formatDate(serverDate.setMinutes(serverDate.getMinutes() - clientTimezoneOffset), DATE_PATTERN)
     }
 
-    timeFromCurrentUTC(dateTime){
+    timeFromCurrentUTC(dateTime) {
         const clientDate = new Date(dateTime);
         const clientTimezoneOffset = new Date().getTimezoneOffset();
-        return formatDate(clientDate.setMinutes(clientDate.getMinutes() + clientTimezoneOffset), "yyyy-mm-dd HH:MM:ss")
+        return formatDate(clientDate.setMinutes(clientDate.getMinutes() + clientTimezoneOffset), DATE_PATTERN)
     }
 
     render() {

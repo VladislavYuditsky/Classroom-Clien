@@ -2,13 +2,15 @@ import React from 'react';
 import {Alert, Button, Form, Nav} from "react-bootstrap";
 import SockJsClient from 'react-stomp';
 import {history} from "../utils";
-import * as axios from "axios";
+import {API_URL, STOMP_ENDPOINT, TOKEN, USER, USERS_TOPIC, WEBSOCKET_PREFIX} from "../constants";
+import {MEMBERS} from "../routes";
+import {api} from "../api/app";
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let userData = localStorage.getItem(USER) ? JSON.parse(localStorage.getItem(USER)) : null;
         this.state = {
             username: '',
             error: '',
@@ -19,7 +21,7 @@ class Login extends React.Component {
 
     componentWillMount() {
         if (this.state.user)
-            history.replace('/members');
+            history.replace(MEMBERS);
     }
 
 
@@ -31,17 +33,19 @@ class Login extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/signIn', {
-            username: this.state.username,
-            roles: this.state.roles,
-            email: this.state.email
-        })
+        api.login(
+            {
+                username: this.state.username,
+                roles: this.state.roles,
+            }
+        )
             .then((response) => {
-                localStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem(USER, JSON.stringify(response.data.user)); //мб не достану так, + достать токен
+                localStorage.setItem(TOKEN, response.data.token);
 
                 this.sendMessage();
 
-                history.replace('/members')
+                history.replace(MEMBERS)
             })
             .catch((err) => {
                 this.setState({
@@ -51,7 +55,7 @@ class Login extends React.Component {
     }
 
     sendMessage = () => {
-        this.clientRef.sendMessage('/app/updateState');
+        this.clientRef.sendMessage(WEBSOCKET_PREFIX);
     };
 
     render() {
@@ -84,13 +88,16 @@ class Login extends React.Component {
                     </Button>
                 </Form>
 
-                <SockJsClient url='http://localhost:8080/classroom-ws/'
-                              topics={['/topic/users']}
+                <SockJsClient url={API_URL + STOMP_ENDPOINT}
+                              topics={[USERS_TOPIC]}
                               onConnect={() => {
                               }}
                               onDisconnect={() => {
                               }}
                               onMessage={() => {
+                                  if (localStorage.getItem(USER)) {
+                                      history.replace(MEMBERS);
+                                  }
                               }}
                               ref={(client) => {
                                   this.clientRef = client

@@ -1,52 +1,59 @@
 import React from 'react';
 import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {history, isStudent, isTeacher} from "../utils";
-import * as axios from "axios";
 import SockJsClient from "react-stomp";
 import classroom from '../icons/classroom.svg';
+import {API_URL, STOMP_ENDPOINT, TOKEN, USER, USERS_TOPIC, WEBSOCKET_PREFIX} from "../constants";
+import {api} from "../api/app";
+import {LOGIN} from "../routes";
 
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let userData = localStorage.getItem(USER) ? JSON.parse(localStorage.getItem(USER)) : null;
         this.state = {
+            user: userData,
             username: userData ? userData.username : '',
             isHandUp: userData ? userData.handUp : false,
         }
     }
 
-
     handAction = () => {
-        axios.post('http://localhost:8080/handAction', {
-            username: this.state.username
-        })
+        api.updateHandState()
             .then((response) => {
                 this.setState({
                     isHandUp: !this.state.isHandUp
                 })
-                localStorage.setItem('user', JSON.stringify(response.data))
+                localStorage.setItem(USER, JSON.stringify(response.data))
                 this.sendMessage();
+            })
+            .catch(() => {
+                this.logout();
             });
     }
 
-    signOut = () => {
-        axios.post('http://localhost:8080/signOut', {
-            username: this.state.username
-        })
+    logout = () => {
+        api.logout()
             .then(() => {
                 this.sendMessage();
-                localStorage.removeItem('user');
-                history.replace('/login');
+                localStorage.removeItem(USER);
+                localStorage.removeItem(TOKEN);
+                history.replace(LOGIN);
+            })
+            .catch(() => {
+                localStorage.removeItem(USER);
+                localStorage.removeItem(TOKEN);
+                history.replace(LOGIN);
             });
     }
 
     sendMessage = () => {
-        this.clientRef.sendMessage('/app/updateState');
+        this.clientRef.sendMessage(WEBSOCKET_PREFIX);
     };
 
     render() {
-        const {username, isHandUp} = this.state;
+        const {username, isHandUp, user} = this.state;
         return (
             <div>
                 <Navbar bg="primary">
@@ -81,19 +88,27 @@ class NavigationBar extends React.Component {
                                 {isTeacher() &&
                                 <NavDropdown.Item href={'/settings'}>Settings</NavDropdown.Item>
                                 }
-                                <NavDropdown.Item onClick={this.signOut}>Logout</NavDropdown.Item>
+                                <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
 
-                <SockJsClient url='http://localhost:8080/classroom-ws/'
-                              topics={['/topic/users']}
+                <SockJsClient url={API_URL + STOMP_ENDPOINT}
+                              topics={[USERS_TOPIC]}
                               onConnect={() => {
                               }}
                               onDisconnect={() => {
                               }}
-                              onMessage={() => {
+                              onMessage={(msg) => {
+                                  let updatedUser = user ? msg.find(item => item.id === user.id) : null;
+
+                                  if (updatedUser) {
+                                      sessionStorage.setItem(USER, JSON.stringify(updatedUser));
+                                      this.setState({
+                                          isHandUp: updatedUser.handUp
+                                      })
+                                  }
                               }}
                               ref={(client) => {
                                   this.clientRef = client

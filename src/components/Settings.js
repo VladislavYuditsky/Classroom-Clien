@@ -1,14 +1,16 @@
 import React from 'react';
 import {history, isStudent, isTeacher} from "../utils";
-import * as axios from "axios";
 import {Alert, Button, ButtonGroup, Col, Form, Row, ToggleButton} from "react-bootstrap";
 import {NavigationBar} from "./Navbar";
+import {USER} from "../constants";
+import {LOGIN} from "../routes";
+import {api} from "../api/app";
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
 
-        let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let userData = localStorage.getItem(USER) ? JSON.parse(localStorage.getItem(USER)) : null;
         this.state = {
             username: userData ? userData.username : '',
             enableReport: false,
@@ -24,10 +26,10 @@ class Settings extends React.Component {
 
     componentWillMount() {
         if (!this.state.username) {
-            history.replace('/login');
+            history.replace(LOGIN);
         }
 
-        axios.get(`http://localhost:8080/report/${this.state.username}`)
+        api.getReport()
             .then((response) => {
                 this.setState({
                     reportId: response.data.id,
@@ -48,12 +50,11 @@ class Settings extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/user/update', {
-            username: this.state.username,
+        api.updateEmail({
             email: this.state.newEmail
         })
             .then((response) => {
-                localStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem(USER, JSON.stringify(response.data));
                 this.setState({
                     email: this.state.newEmail,
                     emailUpdated: true
@@ -67,9 +68,10 @@ class Settings extends React.Component {
     }
 
     setGenerationFrequency(value) {
-        axios.post('http://localhost:8080/report/update', {
+        api.updateReport({
             id: this.state.reportId,
-            generationFrequency: value
+            generationFrequency: value,
+            recipientUsername: this.state.username,
         })
             .then(() => {
                 this.setState({
@@ -82,7 +84,7 @@ class Settings extends React.Component {
         e.preventDefault();
 
         if (this.state.reportId) {
-            axios.post('http://localhost:8080/report/remove', {
+            api.deleteReport({
                 id: this.state.reportId
             })
                 .then(() => {
@@ -99,7 +101,7 @@ class Settings extends React.Component {
                     reportError: 'You must specify the mail to receive the report'
                 })
             } else {
-                axios.post('http://localhost:8080/report', {
+                api.saveReport({
                     generationFrequency: this.state.generationFrequency,
                     recipientUsername: this.state.username
                 })
@@ -169,7 +171,8 @@ class Settings extends React.Component {
                                                 name="radio"
                                                 value={radio.value}
                                                 checked={generationFrequency === radio.value}
-                                                onChange={(e) => this.setGenerationFrequency(e.currentTarget.value)}
+                                                onChange={(e) =>
+                                                    this.setGenerationFrequency(e.currentTarget.value)}
                                             >
                                                 {radio.name}
                                             </ToggleButton>
