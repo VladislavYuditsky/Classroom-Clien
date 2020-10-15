@@ -20,8 +20,8 @@ export const DATE_PATTERN = 'yyyy-mm-dd HH:MM:ss';
 
 //search params
 export const ACTION_EQUALS = 'action:';
-export const DATE_FROM = 'date>';
-export const DATE_TO = 'date<';
+export const DATE_FROM = 'dateTime>';
+export const DATE_TO = 'dateTime<';
 
 //Local Storage constants
 export const USER = 'user';
