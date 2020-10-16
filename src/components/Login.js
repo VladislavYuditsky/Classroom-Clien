@@ -40,7 +40,7 @@ class Login extends React.Component {
             }
         )
             .then((response) => {
-                localStorage.setItem(USER, JSON.stringify(response.data.user)); //мб не достану так, + достать токен
+                localStorage.setItem(USER, JSON.stringify(response.data.user));
                 localStorage.setItem(TOKEN, response.data.token);
 
                 this.sendMessage();
